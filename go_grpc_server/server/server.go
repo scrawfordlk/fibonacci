@@ -24,12 +24,9 @@ func (s *FibonacciServer) GetFibonacci(ctx context.Context, req *fibonacci.Fibon
 func fibonacciCalculation(n int32) int64 {
 	if n <= 1 {
 		return int64(n)
-	}
-	var a, b int64 = 0, 1
-	for i := int32(2); i <= n; i++ {
-		a, b = b, a+b
-	}
-	return b
+	} else {
+    return fibonacciCalculation(n - 1) + fibonacciCalculation(n - 2)
+  }
 }
 
 // StartServer initializes and starts the gRPC server
