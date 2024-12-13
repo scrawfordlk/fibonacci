@@ -23,7 +23,11 @@ func (s *FibonacciServer) GetFibonacci(ctx context.Context, req *fibonacci.Fibon
 // fibonacciCalculation calculates the Fibonacci number for a given n
 func fibonacciCalculation(n int32) int64 {
 	if n <= 1 {
-		return int64(n)
+    if n < 0 {
+      return 0
+    } else {
+      return int64(n)
+    }
 	} else {
     return fibonacciCalculation(n - 1) + fibonacciCalculation(n - 2)
   }
