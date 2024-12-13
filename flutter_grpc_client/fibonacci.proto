@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package fibonacci;
+
+option go_package = "lib/generated/fibonacci";
+
+service FibonacciService {
+  rpc GetFibonacci (FibonacciRequest) returns (FibonacciResponse);
+}
+
+message FibonacciRequest {
+  int32 number = 1;
+}
+
+message FibonacciResponse {
+  int64 fibNumber = 1;
+}
