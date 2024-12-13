@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"context"
@@ -32,11 +32,12 @@ func fibonacciCalculation(n int32) int64 {
 	return b
 }
 
-func main() {
-	// Set up the server and listen for incoming requests
-	listener, err := net.Listen("tcp", ":50052")
+// StartServer initializes and starts the gRPC server
+func StartServer(address string) {
+	// Set up the listener
+	listener, err := net.Listen("tcp", address)
 	if err != nil {
-		log.Fatalf("Failed to listen on port 50052: %v", err)
+		log.Fatalf("Failed to listen on %s: %v", address, err)
 	}
 
 	// Create a new gRPC server
@@ -46,8 +47,9 @@ func main() {
 	fibonacci.RegisterFibonacciServiceServer(grpcServer, &FibonacciServer{})
 
 	// Start serving gRPC requests
-	log.Println("gRPC server is running on port 50052...")
+	log.Printf("gRPC server is running on %s...", address)
 	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
 }
+
