@@ -55,6 +55,13 @@ class _FibonacciScreenState extends State<FibonacciScreen>
   }
 
   Future<void> _getFibonacci() async {
+    // Validate input
+    final inputText = _controller.text.trim();
+    if (!_isValidPositiveInteger(inputText)) {
+      _showSnackBar('Please enter a natural number!');
+      return;
+    }
+
     final channel = ClientChannel(
       'localhost', // Replace with the Go server's address
       port: 50052,
@@ -63,7 +70,7 @@ class _FibonacciScreenState extends State<FibonacciScreen>
 
     final stub = FibonacciServiceClient(channel);
 
-    final request = FibonacciRequest()..number = int.parse(_controller.text);
+    final request = FibonacciRequest()..number = int.parse(inputText);
 
     // Start the stopwatch to measure time taken
     final stopwatch = Stopwatch()..start();
@@ -91,6 +98,22 @@ class _FibonacciScreenState extends State<FibonacciScreen>
       });
       await channel.shutdown();
     }
+  }
+
+  bool _isValidPositiveInteger(String text) {
+    // Check if the string is not empty and represents a valid positive integer
+    final regex = RegExp(r'^[0-9]\d*$'); // Matches positive integers only
+    return regex.hasMatch(text);
+  }
+
+  void _showSnackBar(String message) {
+    // Show a SnackBar with an error message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.redAccent,
+      ),
+    );
   }
 
   Widget _buildCustomLoading() {
